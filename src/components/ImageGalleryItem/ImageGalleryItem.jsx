@@ -4,6 +4,7 @@ import {
 } from './ImageGalleryItem.styled';
 
 const ImageGalleryItem = ({ gallery }) => {
+  console.log(gallery);
   return gallery.hits.map(data => {
     return (
       <GalleryImageItem key={data.id}>

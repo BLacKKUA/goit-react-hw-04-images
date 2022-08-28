@@ -26,8 +26,10 @@ export default class ImageGallery extends Component {
           }
         })
         .then(gallery => {
-          this.setState({ gallery: gallery, loading: false });
-          console.log(this.state);
+          this.setState(prevState => ({
+            gallery: [...prevState.gallery, ...gallery],
+            loading: false,
+          }));
         })
         .catch(error => this.setState({ error }));
     }
