@@ -3,11 +3,17 @@ import {
   GalleryImageItemImage,
 } from './ImageGalleryItem.styled';
 
-const ImageGalleryItem = ({ gallery }) => {
+const ImageGalleryItem = ({ gallery, onClickModal, getImage }) => {
   console.log(gallery);
-  return gallery.hits.map(data => {
+  return gallery.map(data => {
     return (
-      <GalleryImageItem key={data.id}>
+      <GalleryImageItem
+        key={data.id}
+        onClick={() => {
+          onClickModal();
+          getImage(data.webformatURL, data.tags);
+        }}
+      >
         <GalleryImageItemImage
           src={data.webformatURL}
           alt={data.tags}
