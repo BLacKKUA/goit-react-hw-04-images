@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { GalleryImage } from './ImageGallery.styled';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import { Circles } from 'react-loader-spinner';
+import { ButtonLoadMore } from '../LoadMore/LoadMore';
 
 export default class ImageGallery extends Component {
   state = {
@@ -9,20 +10,31 @@ export default class ImageGallery extends Component {
     page: 1,
     loading: false,
   };
+
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.inputFilter !== this.props.inputFilter) {
-      this.setState({ loading: true });
+    if (
+      prevProps.inputFilter !== this.props.inputFilter ||
+      prevState.page !== this.state.page
+    ) {
+      this.setState({ loading: true, gallery: '' });
       fetch(
         `https://pixabay.com/api/?q=${this.props.inputFilter}&page=${this.state.page}&key=28372607-30c2f074d06c20b95d41a8fad&image_type=photo&orientation=horizontal&per_page=12`
       )
-        .then(res => res.json())
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+        })
         .then(gallery => {
-          this.setState({ gallery });
-          this.setState({ loading: false });
+          this.setState({ gallery: gallery, loading: false });
+          console.log(this.state);
         })
         .catch(error => this.setState({ error }));
     }
   }
+  loadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
   render() {
     return (
       <GalleryImage className="gallery">
@@ -47,6 +59,12 @@ export default class ImageGallery extends Component {
           <p>Enter name images</p>
         ) : (
           <ImageGalleryItem gallery={this.state.gallery} />
+        )}
+
+        {(this.state.gallery !== '') & (this.state.gallery.total !== 0) ? (
+          <ButtonLoadMore onClick={this.loadMore} />
+        ) : (
+          ''
         )}
       </GalleryImage>
     );
