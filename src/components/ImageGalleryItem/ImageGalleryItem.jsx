@@ -4,7 +4,6 @@ import {
 } from './ImageGalleryItem.styled';
 
 const ImageGalleryItem = ({ gallery, onClickModal, getImage }) => {
-  console.log(gallery);
   return gallery.map(data => {
     return (
       <GalleryImageItem

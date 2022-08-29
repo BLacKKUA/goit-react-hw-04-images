@@ -13,6 +13,8 @@ export default class ImageGallery extends Component {
     modal: false,
     currentUrl: '',
     currentTags: '',
+    total: 0,
+    totalHits: 0,
   };
 
   toggleModal = () => {
@@ -25,27 +27,34 @@ export default class ImageGallery extends Component {
     this.setState({ currentUrl: webformatURL, currentTags: tags });
   };
 
+  fetchData = () => {
+    fetch(
+      `https://pixabay.com/api/?q=${this.props.inputFilter}&page=${this.state.page}&key=28372607-30c2f074d06c20b95d41a8fad&image_type=photo&orientation=horizontal&per_page=12`
+    )
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then(gallery => {
+        this.setState(prevState => ({
+          gallery: [...prevState.gallery, ...gallery.hits],
+          loading: false,
+          total: prevState.total + gallery.hits.length,
+          totalHits: gallery.totalHits,
+        }));
+      })
+      .catch(error => this.setState({ error }));
+  };
+
   componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.inputFilter !== this.props.inputFilter ||
-      prevState.page !== this.state.page
-    ) {
+    if (prevState.page !== this.state.page) {
       this.setState({ loading: true });
-      fetch(
-        `https://pixabay.com/api/?q=${this.props.inputFilter}&page=${this.state.page}&key=28372607-30c2f074d06c20b95d41a8fad&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-        })
-        .then(gallery => {
-          this.setState(prevState => ({
-            gallery: [...prevState.gallery, ...gallery.hits],
-            loading: false,
-          }));
-        })
-        .catch(error => this.setState({ error }));
+      this.fetchData();
+    }
+    if (prevProps.inputFilter !== this.props.inputFilter) {
+      this.setState({ loading: true, gallery: '', page: 1, total: 0 });
+      this.fetchData();
     }
   }
   loadMore = () => {
@@ -81,7 +90,9 @@ export default class ImageGallery extends Component {
           />
         )}
 
-        {(this.state.gallery !== '') & (this.state.gallery.total !== 0) ? (
+        {(this.state.gallery !== '') &
+        (this.state.gallery.total !== 0) &
+        (this.state.totalHits !== this.state.total) ? (
           <ButtonLoadMore onClick={this.loadMore} />
         ) : (
           ''
