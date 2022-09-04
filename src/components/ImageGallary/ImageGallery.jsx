@@ -16,7 +16,6 @@ const ImageGallery = ({ inputFilter }) => {
   const [total, setTotal] = useState(0);
   const [totalHits, setTotalHits] = useState(0);
   const [firstStart, setFirstStart] = useState(true);
-  const [test, setTest] = useState('');
 
   const toggleModal = () => {
     setModal(!modal);
@@ -39,7 +38,6 @@ const ImageGallery = ({ inputFilter }) => {
           setLoading(false);
           setTotal(total + gallery.hits.length);
           setTotalHits(gallery.totalHits);
-          // setTest(inputFilter);
         })
         .catch(error => this.setState({ error }));
     } else {
