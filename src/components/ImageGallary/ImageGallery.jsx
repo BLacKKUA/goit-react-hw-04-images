@@ -16,6 +16,7 @@ const ImageGallery = ({ inputFilter }) => {
   const [total, setTotal] = useState(0);
   const [totalHits, setTotalHits] = useState(0);
   const [firstStart, setFirstStart] = useState(true);
+  const [test, setTest] = useState('');
 
   const toggleModal = () => {
     setModal(!modal);
@@ -27,10 +28,12 @@ const ImageGallery = ({ inputFilter }) => {
   };
 
   useEffect(() => {
-    setGallery([]);
-    setPage(1);
-    setTotal(0);
-    setTotalHits(0);
+    if (test !== inputFilter) {
+      setGallery([]);
+      setPage(1);
+      setTotal(0);
+      setTotalHits(0);
+    }
     if (firstStart !== true) {
       FetchData(inputFilter, page)
         .then(gallery => {
@@ -40,6 +43,7 @@ const ImageGallery = ({ inputFilter }) => {
           setTotalHits(gallery.totalHits);
         })
         .catch(error => this.setState({ error }));
+      setTest(inputFilter);
     } else {
       setFirstStart(false);
     }
