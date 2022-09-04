@@ -4,7 +4,9 @@ import {
 } from './ImageGalleryItem.styled';
 
 const ImageGalleryItem = ({ gallery, onClickModal, getImage }) => {
+  // console.log(gallery);
   return gallery.map(data => {
+    // console.log(data);
     return (
       <GalleryImageItem
         key={data.id}

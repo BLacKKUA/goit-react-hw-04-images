@@ -1,25 +1,21 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { AppStyled } from './App.styled';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallary/ImageGallery';
 
-export default class App extends Component {
-  state = {
-    inputFilter: '',
-  };
+const App = () => {
+  const [inputFilter, setInputFilter] = useState('');
 
-  handleOnSubmit = inputFilter => {
-    this.setState({ inputFilter });
+  const handleOnSubmit = inputFilter => {
+    setInputFilter(inputFilter);
   };
-
-  render() {
-    return (
-      <AppStyled>
-        <>
-          <Searchbar onSubmit={this.handleOnSubmit} />
-          <ImageGallery inputFilter={this.state.inputFilter} />
-        </>
-      </AppStyled>
-    );
-  }
-}
+  return (
+    <AppStyled>
+      <>
+        <Searchbar onSubmit={handleOnSubmit} />
+        <ImageGallery inputFilter={inputFilter} />
+      </>
+    </AppStyled>
+  );
+};
+export default App;
