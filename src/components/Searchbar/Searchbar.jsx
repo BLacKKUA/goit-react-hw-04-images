@@ -3,7 +3,6 @@ import { BarSearch, FormSearch } from './Searchbar.styled';
 
 const Searchbar = ({ onSubmit }) => {
   const [inputFilter, setInputFilter] = useState('');
-
   const handleInputChange = event => {
     setInputFilter(event.currentTarget.value.toLowerCase());
   };
