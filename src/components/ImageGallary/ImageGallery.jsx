@@ -35,15 +35,13 @@ const ImageGallery = ({ inputFilter }) => {
       setTotalHits(0);
     }
     if (firstStart !== true) {
-      FetchData(inputFilter, page)
-        .then(gallery => {
-          setGallery(prevState => [...prevState, ...gallery.hits]);
-          setLoading(false);
-          setTotal(total + gallery.hits.length);
-          setTotalHits(gallery.totalHits);
-        })
-        .catch(error => this.setState({ error }));
-      setTest(inputFilter);
+      FetchData(inputFilter, page).then(gallery2 => {
+        setGallery([...gallery2.hits]);
+        setLoading(false);
+        setTotal(total + gallery2.hits.length);
+        setTotalHits(gallery2.totalHits);
+        setTest(inputFilter);
+      });
     } else {
       setFirstStart(false);
     }
